@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "360023939896",
+    "firebase_url": "https://everyday-english-156201.firebaseio.com",
+    "project_id": "everyday-english-156201",
+    "storage_bucket": "everyday-english-156201.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360023939896:android:4549fdb47a88a8bd",
+        "android_client_info": {
+          "package_name": "com.sukhajata.everydayenglish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360023939896-mjficvtst785cunopekm221c6gl7ut04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sukhajata.everydayenglish",
+            "certificate_hash": "206be465c5be252c64d60ac3232ac0a2bc8d5122"
+          }
+        },
+        {
+          "client_id": "360023939896-6b3r121ku7ra4rtd7j5merd4ljak9dhc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sukhajata.everydayenglish",
+            "certificate_hash": "ca8beffe0152fe96ddbccde67c8574320615b1bc"
+          }
+        },
+        {
+          "client_id": "360023939896-vbbglufibsbeks9c5l8rhcggtho8t6os.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpoeCLXUBa7W6n_Qr-wQFsYWEXi_vvkac"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360023939896-8aju3ggkripjggi2im4r5lcl7k5b2a15.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360023939896:android:f3cae33844838cc9",
+        "android_client_info": {
+          "package_name": "everydayenglish.sukhajata.com.everydayenglish8.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360023939896-6sbe6i5q1usa4ksu11l0ak4v4uva4me8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "everydayenglish.sukhajata.com.everydayenglish8.app",
+            "certificate_hash": "ca8beffe0152fe96ddbccde67c8574320615b1bc"
+          }
+        },
+        {
+          "client_id": "360023939896-vbbglufibsbeks9c5l8rhcggtho8t6os.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpoeCLXUBa7W6n_Qr-wQFsYWEXi_vvkac"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360023939896-8aju3ggkripjggi2im4r5lcl7k5b2a15.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

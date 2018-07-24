@@ -1,0 +1,116 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorLabelBackground"
+    tools:context="com.sukhajata.everydayenglish.TotalsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+        <TableRow>
+            <TextView
+                android:id="@+id/totals_lblCorrect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="24dp"
+                android:padding="10dp"
+                android:text="@string/correct"/>
+            <TextView
+                android:id="@+id/totals_txtCorrect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="24dp"
+                android:padding="10dp"
+                android:textColor="@color/colorBorderCorrect"
+                android:text="8"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/totals_lblErrors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="24dp"
+                android:padding="10dp"
+                android:text="@string/mistakes"/>
+            <TextView
+                android:id="@+id/totals_txtErrors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="24dp"
+                android:padding="10dp"
+                android:textColor="@color/colorBorderWrong"
+                android:text="7"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/totals_lblWordTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="24dp"
+                android:padding="10dp"
+                android:text="@string/total_words"/>
+            <TextView
+                android:id="@+id/totals_txtTotalWords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="24dp"
+                android:padding="10dp" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/totals_lblPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textSize="20dp"
+                android:padding="10dp"
+                android:text="@string/percentage_of_english"/>
+            <TextView
+                android:id="@+id/totals_txtPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:maxLines="1"
+                android:textSize="24dp"
+                android:padding="10dp" />
+        </TableRow>
+
+    </TableLayout>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/totals_flexbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            app:alignItems="flex_start"
+            app:alignContent="flex_start">
+
+        </com.google.android.flexbox.FlexboxLayout>
+    <Button
+        android:id="@+id/totals_btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        style="@style/NavigationButton"/>
+    </LinearLayout>
+
+</ScrollView>

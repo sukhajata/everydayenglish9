@@ -1,7 +1,9 @@
 package com.sukhajata.everydayenglish.model;
 
+import android.media.AudioManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ public class Slide implements Parcelable{
     public String ContentChinese;
     public int SlideOrder;
     public String ImageFileName;
+    public String AudioFileName;
     public int LessonReference;
     public ArrayList<SlideMedia> MediaList;
     //public ArrayList<SlideWord> SlideWordList;
@@ -39,6 +42,7 @@ public class Slide implements Parcelable{
                  String contentChinese,
                  int slideOrder,
                  String imageFileName,
+                 String audioFileName,
                  int lessonReference,
                  ArrayList<SlideMedia> mediaList) {
         Id = id;
@@ -50,6 +54,7 @@ public class Slide implements Parcelable{
         ContentThai = contentThai;
         SlideOrder = slideOrder;
         ImageFileName = imageFileName;
+        AudioFileName = audioFileName;
         LessonReference = lessonReference;
         MediaList = mediaList;
     }
@@ -64,6 +69,7 @@ public class Slide implements Parcelable{
         ContentThai = in.readString();
         SlideOrder = in.readInt();
         ImageFileName = in.readString();
+        AudioFileName = in.readString();
         LessonReference = in.readInt();
         MediaList = new ArrayList<>();
         in.readTypedList(MediaList, SlideMedia.CREATOR);
@@ -85,6 +91,7 @@ public class Slide implements Parcelable{
         out.writeString(ContentThai);
         out.writeInt(SlideOrder);
         out.writeString(ImageFileName);
+        out.writeString(AudioFileName);
         out.writeInt(LessonReference);
         out.writeTypedList(MediaList);
 

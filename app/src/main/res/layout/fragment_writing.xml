@@ -1,0 +1,25 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorLabelBackground"
+    tools:context="com.sukhajata.everydayenglish.WritingFragment"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/writing_txtTarget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       style="@style/LabelTarget"/>
+    <EditText
+        android:id="@+id/writing_txtWriting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:textSize="18dp"
+        android:padding="5dp"
+        android:layout_marginTop="@dimen/button_border"/>
+
+</LinearLayout>

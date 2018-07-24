@@ -16,13 +16,16 @@ import com.sukhajata.everydayenglish.model.Lesson;
 import com.sukhajata.everydayenglish.model.LessonCompleted;
 import com.sukhajata.everydayenglish.model.Slide;
 import com.sukhajata.everydayenglish.model.SlideMedia;
+import com.sukhajata.everydayenglish.model.Word;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -34,7 +37,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static DbHelper mInstance;
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 6;
     public static final String DB_NAME = "EverydayEnglish2.db";
     public static String DB_PATH;
 
@@ -510,6 +513,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     String contentArabic = cursorSlides.getString(cursorSlides.getColumnIndex(DbContract.Table_Slide.COLUMN_NAME_CONTENT_ARABIC));
                     String contentChinese = cursorSlides.getString(cursorSlides.getColumnIndex(DbContract.Table_Slide.COLUMN_NAME_CONTENT_CHINESE));
                     String slideImage = cursorSlides.getString(cursorSlides.getColumnIndex(DbContract.Table_Slide.COLUMN_NAME_IMAGE_FILE_NAME));
+                    String slideAudio = cursorSlides.getString(cursorSlides.getColumnIndex(DbContract.Table_Slide.COLUMN_NAME_AUDIO_FILE_NAME));
                     int lessonReference = cursorSlides.getInt(cursorSlides.getColumnIndex(DbContract.Table_Slide.COLUMN_NAME_LESSON_REFERENCE));
 
                     ArrayList<SlideMedia> slideMediaList = new ArrayList<SlideMedia>();
@@ -566,6 +570,7 @@ public class DbHelper extends SQLiteOpenHelper {
                             contentChinese,
                             slideOrder,
                             slideImage,
+                            slideAudio,
                             lessonReference,
                             slideMediaList);
                     Log.d("SUKH", "adding slide cat " + String.valueOf(catId));
@@ -653,41 +658,17 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    /*
-    public void updateLessonCompleted(int userId, int moduleId, int lessonId, int lessonOrder) {
+
+    public void updateLessonCompleted(int lessonId) {
+
         SQLiteDatabase dbRead = this.getReadableDatabase();
         SQLiteDatabase dbWrite = this.getWritableDatabase();
 
         try {
-            //update the user table, if this is the highest lesson
-            String sql = DbContract.SQL_GET_LAST_LESSON_COMPLETED;
-            String[] args = {String.valueOf(userId), String.valueOf(moduleId)};
-            Cursor cursor = dbRead.rawQuery(sql, args);
-            int lastLessonOrder = 0;
-            if (cursor.moveToFirst()) {
-                lastLessonOrder = cursor.getInt(cursor.getColumnIndex(DbContract.Table_LessonCompleted.COLUMN_NAME_LESSON_ORDER));
-
-            }
-            cursor.close();
-
-            if (lessonOrder > lastLessonOrder) {
-                String where = DbContract.Table_User.COLUMN_NAME_ID + " = ?";
-                String[] whereArgs = {String.valueOf(userId)};
-                ContentValues values = new ContentValues();
-                values.put(DbContract.Table_User.COLUMN_NAME_LESSON_COMPLETED_ORDER, lessonOrder);
-                dbWrite.update(
-                        DbContract.Table_User.TABLE_NAME,
-                        values,
-                        where,
-                        whereArgs
-                );
-
-            }
-
             //update lesson completed table
             //remove old value
-            sql = DbContract.SQL_DELETE_LESSON_COMPLETED;
-            String[] args2 = {String.valueOf(userId), String.valueOf(moduleId), String.valueOf(lessonOrder)};
+            String sql = DbContract.SQL_DELETE_LESSON_COMPLETED;
+            String[] args2 = {String.valueOf(lessonId)};
             dbWrite.execSQL(sql, args2);
 
             //make new value
@@ -695,25 +676,24 @@ public class DbHelper extends SQLiteOpenHelper {
             String dateStr = sdf.format(new Date());
 
             String sqlErrorCount = DbContract.SQL_GET_SLIDE_ERROR_COUNT;
-            String[] argErrorCount = {String.valueOf(userId), String.valueOf(lessonId)};
+            String[] argErrorCount = {String.valueOf(lessonId)};
             Cursor cursor1 = dbRead.rawQuery(sqlErrorCount, argErrorCount);
             int errors = 0;
             if (cursor1.moveToFirst()) {
-                errors = cursor1.getInt(cursor1.getColumnIndex("Total"));
+                errors = cursor1.getInt(cursor1.getColumnIndex(DbContract.Table_SlideCompleted.COLUMN_NAME_ERRORS));
             }
 
-            String sqlCorrectCount = DbContract.SQL_GET_SLIDE_CORRECT_COUNT;
-            String[] argCorrectCount = {String.valueOf(userId), String.valueOf(lessonId)};
-            Cursor cursor2 = dbRead.rawQuery(sqlCorrectCount, argCorrectCount);
-            int correct = 0;
+            String sqlSlideCount = DbContract.SQL_SLIDE_COUNT;
+            String[] argSlideCount = {String.valueOf(lessonId)};
+            Cursor cursor2 = dbRead.rawQuery(sqlSlideCount, argSlideCount);
+            int total = 0;
             if (cursor2.moveToFirst()) {
-                correct = cursor2.getInt(cursor2.getColumnIndex("Total"));
+                total = cursor2.getInt(cursor2.getColumnIndex("Total"));
             }
+            int correct = total - errors;
 
             ContentValues values = new ContentValues();
-            values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_USER_ID, userId);
-            values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_MODULE_ID, moduleId);
-            values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_LESSON_ORDER, lessonOrder);
+            values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_LESSON_ID, lessonId);
             values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_CORRECT, correct);
             values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_ERRORS, errors);
             values.put(DbContract.Table_LessonCompleted.COLUMN_NAME_DATE, dateStr);
@@ -731,8 +711,10 @@ public class DbHelper extends SQLiteOpenHelper {
             dbRead.close();
             dbWrite.close();
         }
+
     }
 
+    /*
     public int getSlideCompleted(int userId, int lessonId) {
         int slideOrder = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -755,6 +737,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return slideOrder;
     }
 
+
     public void checkClearSlideCompleted(int userId, int moduleId, int lessonId, int lessonOrder) {
         SQLiteDatabase dbRead = this.getReadableDatabase();
 
@@ -775,8 +758,8 @@ public class DbHelper extends SQLiteOpenHelper {
             dbRead.close();
         }
     }
-
-    public void updateSlideCompleted(int userId, int lessonId, int slideOrder, int mistakes) {
+*/
+    public void updateSlideCompleted(int slideId, int mistakes) {
         SQLiteDatabase dbRead = this.getReadableDatabase();
         SQLiteDatabase dbWrite = this.getWritableDatabase();
 
@@ -784,13 +767,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
             //only insert if this slide has not been completed already
             String sql = DbContract.SQL_CHECK_SLIDE_COMPLETED;
-            String[] args = {String.valueOf(userId), String.valueOf(lessonId), String.valueOf(slideOrder)};
+            String[] args = {String.valueOf(slideId)};
             Cursor cursor = dbRead.rawQuery(sql, args);
             if (!cursor.moveToFirst()) {
                 ContentValues values = new ContentValues();
-                values.put(DbContract.Table_SlideCompleted.COLUMN_NAME_USER_ID, userId);
-                values.put(DbContract.Table_SlideCompleted.COLUMN_NAME_LESSON_ID, lessonId);
-                values.put(DbContract.Table_SlideCompleted.COLUMN_NAME_SLIDE_ORDER, slideOrder);
+                values.put(DbContract.Table_SlideCompleted.COLUMN_NAME_SLIDE_ID, slideId);
                 values.put(DbContract.Table_SlideCompleted.COLUMN_NAME_ERRORS, mistakes);
                 dbWrite.insert(
                         DbContract.Table_SlideCompleted.TABLE_NAME,
@@ -809,6 +790,35 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<Word> getWords() {
+        ArrayList<Word> words = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            String sql = DbContract.SQL_SELECT_WORDS;
+            Cursor cursor = db.rawQuery(sql, null);
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_ID));
+                String word = cursor.getString(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_WORD));
+                String word2 = cursor.getString(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_WORD2));
+                String word3 = cursor.getString(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_WORD3));
+                String word4 = cursor.getString(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_WORD4));
+                String thai = cursor.getString(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_THAI));
+                int frequency = cursor.getInt(cursor.getColumnIndex(DbContract.Table_Top_1000.COLUMN_NAME_FREQUENCY));
+                int total = cursor.getInt(cursor.getColumnIndex(DbContract.Table_Lesson_Word_Group.COLUMN_NAME_TOTAL));
+                Word newWord = new Word(id, word, word2, word3, word4, thai, frequency, total);
+                words.add(newWord);
+            }
+
+        } catch (SQLiteException ex) {
+            handleError(ex);
+        } finally {
+            db.close();
+        }
+        return words;
+    }
+
+/*
     public void insertUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 

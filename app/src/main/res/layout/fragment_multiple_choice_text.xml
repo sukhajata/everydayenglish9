@@ -1,0 +1,84 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sukhajata.everydayenglish.MultipleChoiceTextFragment"
+    android:background="@color/colorLabelBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/multipleChoiceText_speaker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_speaker" />
+            <TextView
+                android:id="@+id/multipleChoiceText_txtContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/multipleChoiceText_speaker"
+                android:layout_centerVertical="true"
+                style="@style/LabelTarget"/>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/multipleChoiceText_frame1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_border">
+            <Button
+                android:id="@+id/multipleChoiceText_txtChoice1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectableButton"/>
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/multipleChoiceText_frame2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_border">
+            <Button
+                android:id="@+id/multipleChoiceText_txtChoice2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectableButton"/>
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/multipleChoiceText_frame3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_border">
+            <Button
+                android:id="@+id/multipleChoiceText_txtChoice3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectableButton"/>
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/multipleChoiceText_frame4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_border">
+            <Button
+                android:id="@+id/multipleChoiceText_txtChoice4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/SelectableButton"/>
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/multipleChoiceText_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/frame_border"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+</ScrollView>

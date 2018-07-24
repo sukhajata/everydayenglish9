@@ -98,6 +98,6 @@ public class HomeFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
 
-        void onListFragmentInteraction(Lesson item);
+        void onHomeFragmentInteraction(Lesson item);
     }
 }

@@ -116,6 +116,10 @@ public class DbContract {
                     "WHERE " + Table_Slide.COLUMN_NAME_LESSON_ID + " = ? " +
                     "ORDER BY " + Table_Slide.COLUMN_NAME_SLIDE_ORDER;
 
+    public static final String SQL_SLIDE_COUNT =
+            "SELECT COUNT(*) AS TOTAL FROM " + Table_Slide.TABLE_NAME + " " +
+                    "WHERE " + Table_Slide.COLUMN_NAME_LESSON_ID + " = ?";
+
     public static String SQL_INSERT_SLIDE =
             "INSERT INTO " + Table_Slide.TABLE_NAME + " (" +
                     Table_Slide.COLUMN_NAME_ID + ", " +
@@ -237,13 +241,9 @@ public class DbContract {
         public static final String COLUMN_NAME_DATE = "DateCompleted";
     }
 
-    public static final String SQL_CREATE_TABLE_LESSON_COMPLETED =
-            "CREATE TABLE " + Table_LessonCompleted.TABLE_NAME + " (" +
-                    Table_LessonCompleted.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    Table_LessonCompleted.COLUMN_NAME_LESSON_ID + " INTEGER, " +
-                    Table_LessonCompleted.COLUMN_NAME_CORRECT + " INTEGER, " +
-                    Table_LessonCompleted.COLUMN_NAME_ERRORS + " INTEGER, " +
-                    Table_LessonCompleted.COLUMN_NAME_DATE + " TEXT)";
+
+    public static final String SQL_DELETE_LESSON_COMPLETED =
+            "DELETE FROM LessonCompleted WHERE " + Table_LessonCompleted.COLUMN_NAME_LESSON_ID + " = ?";
 
     public static final String SQL_EXISTS_LESSON_COMPLETED =
             "SELECT * FROM " + Table_LessonCompleted.TABLE_NAME + " " +
@@ -272,11 +272,16 @@ public class DbContract {
         static final String COLUMN_NAME_ERRORS = "Errors";
     }
 
-    static final String SQL_CREATE_TABLE_SLIDE_COMPLETED =
-            "CREATE TABLE " + Table_SlideCompleted.TABLE_NAME + " (" +
-                    Table_SlideCompleted.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    Table_SlideCompleted.COLUMN_NAME_SLIDE_ID + " INTEGER, " +
-                    Table_SlideCompleted.COLUMN_NAME_ERRORS + " INTEGER)";
+    static final String SQL_CHECK_SLIDE_COMPLETED =
+            "SELECT * FROM " + Table_SlideCompleted.TABLE_NAME + " " +
+                    "WHERE "  + Table_SlideCompleted.COLUMN_NAME_SLIDE_ID + " = ?";
+
+    static final String SQL_GET_SLIDE_ERROR_COUNT =
+            "SELECT " + Table_SlideCompleted.COLUMN_NAME_ERRORS + " " +
+                    "FROM " + Table_SlideCompleted.TABLE_NAME + " sc " +
+                    "INNER JOIN " + Table_Slide.TABLE_NAME + " s " +
+                    "ON sc." + Table_SlideCompleted.COLUMN_NAME_SLIDE_ID + " = s." + Table_Slide.COLUMN_NAME_ID + " " +
+                    "WHERE s." + Table_Slide.COLUMN_NAME_LESSON_ID + " = ?";
 
 
     //top 1000 words
@@ -348,7 +353,7 @@ public class DbContract {
                     "VALUES (?, ?, ?, ?)";
 
 
-    public static final String SELECT_WORDS =
+    public static final String SQL_SELECT_WORDS =
             "SELECT lw." + Table_Lesson_Word_Group.COLUMN_NAME_WORD_ID + ", " +
                     "t." + Table_Top_1000.COLUMN_NAME_THAI + ", " +
                     "t." + Table_Top_1000.COLUMN_NAME_WORD + ", " +
