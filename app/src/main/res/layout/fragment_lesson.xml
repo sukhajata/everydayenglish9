@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:padding="10dp"
     android:layout_marginBottom="10dp">
 
     <RelativeLayout
         android:id="@+id/lesson_titleBar"
+        android:background="@color/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/lesson_txtName"
@@ -17,9 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorLabelBackground"
-            android:padding="@dimen/button_padding"
-            android:text="number 1"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
         <TextView
             android:id="@+id/lesson_txtErrors"
             android:layout_alignParentRight="true"
@@ -27,8 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorBorderWrong"
-            android:textSize="20dp"
-            android:padding="@dimen/button_padding"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"
             />
         <TextView
             android:id="@+id/lesson_txtCorrect"
@@ -36,18 +35,17 @@
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
             android:textColor="@color/colorBorderCorrect"
-            android:textSize="20dp"
-            android:padding="@dimen/button_padding"
+            android:textSize="20sp"
             />
         <TextView
             android:id="@+id/lesson_txtDateCompleted"
             android:layout_toLeftOf="@id/lesson_txtCorrect"
             android:layout_centerVertical="true"
-            android:padding="@dimen/button_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textColor="@color/colorLabelBackground"/>
 
     </RelativeLayout>
@@ -55,8 +53,8 @@
         android:id="@+id/lesson_txtDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/button_padding"
-        android:textSize="16dp"
-        android:background="@color/colorGrey"
+        android:textSize="16sp"
+        android:textColor="@color/colorLabelBackground"
+        android:background="@color/colorAccent"
         android:textAppearance="?attr/textAppearanceListItem" />
 </LinearLayout>

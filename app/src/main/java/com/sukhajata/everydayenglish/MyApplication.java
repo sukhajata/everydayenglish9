@@ -61,12 +61,16 @@ public class MyApplication extends Application {
 
 
     public void playAudio(String text, String audioFileName) {
-        if (audioFileName.length() > 1) {
+        if (audioFileName != null && audioFileName.length() > 1) {
             audioFileName = audioFileName.substring(0, audioFileName.indexOf('.'));
+            String path = "raw/" + audioFileName;
             try {
-                Class res = R.raw.class;
-                Field field = res.getField(audioFileName);
-                int resId = field.getInt(null);
+                int resId = getResources().getIdentifier(audioFileName, "raw", getPackageName());
+                Log.d("AUDIO", audioFileName + ", resId: " + String.valueOf(resId));
+
+                //Class res = R.raw.class;
+                //Field field = res.getField(audioFileName);
+                //int resId = field.getInt(null);
 
                 //cancel anything currently playing
                 if (mediaPlayer != null) {

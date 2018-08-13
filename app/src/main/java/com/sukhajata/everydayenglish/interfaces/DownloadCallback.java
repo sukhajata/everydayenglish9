@@ -8,7 +8,7 @@ public interface DownloadCallback {
     String TYPE_LESSONS = "Lessons";
     String TYPE_SLIDES = "Slides";
     String TYPE_IMAGES = "Images";
-    String TYPE_USER = "User";
+    String TYPE_SYNC_USER = "User";
     String TYPE_CLASS = "Class";
     String TYPE_GET_USER = "GetUser";
     String TYPE_PUSH_LESSON_COMPLETED = "PushLessonCompleted";
@@ -21,7 +21,6 @@ public interface DownloadCallback {
 
 
     void onDownloadError(String msg);
-    void onDownloadFinished(String code, String type) ;
-    void onDownloadResult(String code, String type, String[] args);
+
     void onDownloadResult(String code, String type, Object result);
 }

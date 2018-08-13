@@ -1,7 +1,6 @@
 package com.sukhajata.everydayenglish;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
@@ -11,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
-import com.sukhajata.everydayenglish.model.SlideMedia;
 import com.sukhajata.everydayenglish.model.Word;
 
 import java.util.ArrayList;
@@ -40,6 +37,7 @@ public class TotalsFragment extends Fragment {
     private int mErrors;
     private int mWordTotal;
     private double mPercentage;
+    private ArrayList<FrameLayout> mFrames;
 
     private OnTotalsFragmentInteractionListener mListener;
 
@@ -111,6 +109,7 @@ public class TotalsFragment extends Fragment {
         FlexboxLayout flexboxLayout = (FlexboxLayout) view.findViewById(R.id.totals_flexbox);
 
         ArrayList<Word> words = DbHelper.getInstance(getContext()).getWords();
+        mFrames = new ArrayList<>();
         for (Word word : words) {
             FrameLayout frame = new FrameLayout(getActivity());
             frame.setPadding(7,7,7,7);
@@ -118,13 +117,10 @@ public class TotalsFragment extends Fragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             frame.setLayoutParams(frameLayoutParams);
+            mFrames.add(frame);
 
             Button btn = new Button(getActivity(), null, R.style.SelectableButton);
-            ViewGroup.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            btn.setLayoutParams(buttonLayoutParams);
-            setupButton(frame, btn, word);
+            setupButton(frame, frameLayoutParams, btn, word);
 
             frame.addView(btn);
             flexboxLayout.addView(frame);
@@ -135,16 +131,20 @@ public class TotalsFragment extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onFragmentInteraction();
+                mListener.onTotalsFragmentInteraction();
             }
         });
 
         return view;
     }
 
-    private void setupButton(final FrameLayout frame, Button button, final Word word) {
+    private void setupButton(final FrameLayout frame, ViewGroup.LayoutParams layoutParams, Button button, final Word word) {
+        button.setLayoutParams(layoutParams);
         button.setPadding(14,14,14,14);
         button.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, null));
+        button.setTextSize(20);
+        button.setTextColor(ResourcesCompat.getColor(getResources(),R.color.colorLabelBackground, null));
+        button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         String txt = word.Word;
         if (word.Word2.length() > 0) {
             txt += " " + word.Word2;
@@ -157,14 +157,18 @@ public class TotalsFragment extends Fragment {
         if (word.Word4.length() > 0) {
             txt += " " + word.Word4;
         }
+
+        txt += "\n" + word.Thai;
         final String all = txt;
         button.setText(txt);
-        button.setTextSize(20);
-        button.setTextColor(ResourcesCompat.getColor(getResources(),R.color.colorLabelBackground, null));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MyApplication)getActivity().getApplication()).playAudio(all, null);
+                for (FrameLayout fl : mFrames) {
+                    fl.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorLabelBackground, null));
+                }
+                frame.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorBorderSelected, null));
             }
         });
     }
@@ -197,6 +201,6 @@ public class TotalsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnTotalsFragmentInteractionListener {
-        void onFragmentInteraction();
+        void onTotalsFragmentInteraction();
     }
 }

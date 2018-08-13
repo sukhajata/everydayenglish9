@@ -286,29 +286,32 @@ public class LessonActivity extends AppCompatActivity
         DbHelper.getInstance(this)
                 .updateSlideCompleted(mCurrentSlide, errors);
 
-
-        if (errors > 1) {
-            moveNext();
-        } else {
+        if (errors > 0) {
             LinearLayout progressPanel = (LinearLayout)findViewById(R.id.lesson_progressPanel);
             ImageView star = (ImageView)progressPanel.getChildAt(mCurrentSlide);
+            star.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_red, null));
+
+        } else {
+            LinearLayout progressPanel = (LinearLayout) findViewById(R.id.lesson_progressPanel);
+            ImageView star = (ImageView) progressPanel.getChildAt(mCurrentSlide);
             star.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_gold, null));
-
-            mCurrentSlide++;
-            if (mCurrentSlide < mLesson.Pages.size()) {
-                moveNext();
-            } else {
-                DbHelper.getInstance(getApplicationContext())
-                        .updateLessonCompleted(mLesson.Id);
-
-                Intent intent = new Intent();
-                intent.putExtra(ARG_NAME_FINISH_TYPE, FINISH_TYPE_LESSON_COMPLETED);
-                intent.putExtra(ARG_NAME_LESSON, mLesson);
-                setResult(Activity.RESULT_OK, intent);
-
-                finish();
-            }
         }
+
+        mCurrentSlide++;
+        if (mCurrentSlide < mLesson.Pages.size()) {
+            moveNext();
+        } else {
+            DbHelper.getInstance(getApplicationContext())
+                    .updateLessonCompleted(mLesson.Id);
+
+            Intent intent = new Intent();
+            intent.putExtra(ARG_NAME_FINISH_TYPE, FINISH_TYPE_LESSON_COMPLETED);
+            intent.putExtra(ARG_NAME_LESSON, mLesson);
+            setResult(Activity.RESULT_OK, intent);
+
+            finish();
+        }
+
 
     }
 

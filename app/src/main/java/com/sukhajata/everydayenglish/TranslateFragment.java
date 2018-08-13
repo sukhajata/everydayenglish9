@@ -162,6 +162,8 @@ public class TranslateFragment extends Fragment implements AudioFinishedCallback
             }
         });
 
+        ((MyApplication)getActivity().getApplication()).playAudio(mTarget.English, mTarget.AudioFileName);
+
         return layout;
     }
 

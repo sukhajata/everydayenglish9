@@ -117,7 +117,7 @@ public class DbContract {
                     "ORDER BY " + Table_Slide.COLUMN_NAME_SLIDE_ORDER;
 
     public static final String SQL_SLIDE_COUNT =
-            "SELECT COUNT(*) AS TOTAL FROM " + Table_Slide.TABLE_NAME + " " +
+            "SELECT COUNT(*) AS Total FROM " + Table_Slide.TABLE_NAME + " " +
                     "WHERE " + Table_Slide.COLUMN_NAME_LESSON_ID + " = ?";
 
     public static String SQL_INSERT_SLIDE =
@@ -258,6 +258,14 @@ public class DbContract {
                     Table_LessonCompleted.COLUMN_NAME_DATE + ") " +
                     "VALUES (?, ?, ?, ?)";
 
+    public static final String SQL_GET_LAST_LESSON_COMPLETED =
+            "SELECT " + Table_Lesson.COLUMN_NAME_LESSON_ORDER + " " +
+                    "FROM " + Table_Lesson.TABLE_NAME + " l " +
+                    "INNER JOIN " + Table_LessonCompleted.TABLE_NAME + " c " +
+                    "ON l." + Table_Lesson.COLUMN_NAME_ID + " = " + Table_LessonCompleted.COLUMN_NAME_LESSON_ID + " " +
+                    "ORDER BY " + Table_Lesson.COLUMN_NAME_LESSON_ORDER + " DESC " +
+                    "LIMIT 1";
+
     public static final String SQL_EXISTS_LESSON =
             "SELECT 1 FROM " + Table_Lesson.TABLE_NAME + " " +
                     "WHERE " + Table_Lesson.COLUMN_NAME_LESSON_ORDER + " = ? " +
@@ -275,6 +283,10 @@ public class DbContract {
     static final String SQL_CHECK_SLIDE_COMPLETED =
             "SELECT * FROM " + Table_SlideCompleted.TABLE_NAME + " " +
                     "WHERE "  + Table_SlideCompleted.COLUMN_NAME_SLIDE_ID + " = ?";
+
+    static final String SQL_DELETE_SLIDE_COMPLETED =
+            "DELETE FROM " + Table_SlideCompleted.TABLE_NAME + " " +
+                    "WHERE " + Table_SlideCompleted.COLUMN_NAME_SLIDE_ID + " = ?";
 
     static final String SQL_GET_SLIDE_ERROR_COUNT =
             "SELECT " + Table_SlideCompleted.COLUMN_NAME_ERRORS + " " +
@@ -354,7 +366,7 @@ public class DbContract {
 
 
     public static final String SQL_SELECT_WORDS =
-            "SELECT lw." + Table_Lesson_Word_Group.COLUMN_NAME_WORD_ID + ", " +
+            "SELECT t." + Table_Top_1000.COLUMN_NAME_ID + ", " +
                     "t." + Table_Top_1000.COLUMN_NAME_THAI + ", " +
                     "t." + Table_Top_1000.COLUMN_NAME_WORD + ", " +
                     "t." + Table_Top_1000.COLUMN_NAME_WORD2 + ", " +
@@ -370,8 +382,13 @@ public class DbContract {
                     "FROM " + Table_LessonCompleted.TABLE_NAME + " " +
                     "WHERE " + Table_LessonCompleted.COLUMN_NAME_CORRECT + " >= " + Table_LessonCompleted.COLUMN_NAME_ERRORS + ") " +
                     "GROUP BY lw." + Table_Lesson_Word_Group.COLUMN_NAME_WORD_ID + " " +
-                    "HAVING SUM(lw." + Table_Lesson_Word_Group.COLUMN_NAME_TOTAL + ") >= 10" +
+                    "HAVING SUM(lw." + Table_Lesson_Word_Group.COLUMN_NAME_TOTAL + ") >= 10 " +
                     "ORDER BY SUM(lw." + Table_Lesson_Word_Group.COLUMN_NAME_TOTAL + ")";
+
+    public static String SQL_SELECT_TOP_WORDS =
+            "SELECT * FROM " + Table_Top_1000.TABLE_NAME +
+                    "ORDER BY " + Table_Top_1000.COLUMN_NAME_FREQUENCY + " " +
+                    "LIMIT 500";
 
 
 }

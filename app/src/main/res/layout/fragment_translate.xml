@@ -12,50 +12,52 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-    <TextView
-        android:id="@+id/translate_txtTarget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/LabelTargetThai"/>
-    <RelativeLayout
-        android:id="@+id/translate_topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/translate_speaker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_speaker" />
         <TextView
-            android:id="@+id/translate_txtEnglish"
+            android:id="@+id/translate_txtTarget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/translate_speaker"
-            android:layout_centerVertical="true"
-            style="@style/LabelTarget"/>
-    </RelativeLayout>
+            style="@style/LabelTargetThai"/>
+        <RelativeLayout
+            android:id="@+id/translate_topLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp">
+            <ImageView
+                android:id="@+id/translate_speaker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_speaker" />
+            <TextView
+                android:id="@+id/translate_txtEnglish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/translate_speaker"
+                android:layout_centerVertical="true"
+                style="@style/LabelTarget"/>
+        </RelativeLayout>
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/translate_flexbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:alignItems="flex_start"
-        app:alignContent="flex_start">
-    </com.google.android.flexbox.FlexboxLayout>
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/translate_flexbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            app:alignItems="flex_start"
+            app:alignContent="flex_start">
+        </com.google.android.flexbox.FlexboxLayout>
 
-    <ImageView
-        android:id="@+id/translate_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/frame_border" />
-    <Button
-        android:id="@+id/translate_btnNext"
-        style="@style/NavigationButton"
-        android:text="@string/next"
-        android:enabled="false"/>
+        <ImageView
+            android:id="@+id/translate_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/frame_border" />
+        <Button
+            android:id="@+id/translate_btnNext"
+            style="@style/NavigationButton"
+            android:text="@string/next"
+            android:enabled="false"/>
 
     </LinearLayout>
 </ScrollView>

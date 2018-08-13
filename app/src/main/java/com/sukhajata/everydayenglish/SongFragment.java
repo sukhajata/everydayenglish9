@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.sukhajata.everydayenglish.dummy.DummyContent;
 import com.sukhajata.everydayenglish.dummy.DummyContent.DummyItem;
@@ -54,14 +55,21 @@ public class SongFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_song_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        Context context = view.getContext();
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.song_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setAdapter(new MySongRecyclerViewAdapter(context, mSlide.MediaList, mListener));
 
-            recyclerView.setAdapter(new MySongRecyclerViewAdapter(context, mSlide.MediaList, mListener));
-        }
+        //next button
+        Button button = (Button) view.findViewById(R.id.song_btn_continue);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onSlideCompleted(mSlide.Id, 0);
+            }
+        });
+
         return view;
     }
 

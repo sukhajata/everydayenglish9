@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,11 +20,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
+//import com.firebase.ui.auth.AuthUI;
+//import com.firebase.ui.auth.IdpResponse;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 import com.sukhajata.everydayenglish.interfaces.AudioSetupCallback;
+import com.sukhajata.everydayenglish.interfaces.DownloadCallback;
 import com.sukhajata.everydayenglish.model.Lesson;
 import com.sukhajata.everydayenglish.model.LessonCompleted;
 
@@ -36,8 +45,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        HomeFragment.OnListFragmentInteractionListener,
-        AudioSetupCallback{
+        HomeFragment.OnHomeFragmentInteractionListener,
+        TotalsFragment.OnTotalsFragmentInteractionListener,
+        AudioSetupCallback,
+        DownloadCallback
+        {
 
     public static final int USER_REQUEST_CODE = 1;
     public static final int LESSON_REQUEST_CODE = 2;
@@ -46,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements
     private boolean mAudioSetupComplete;
     private boolean waiting;
     private ProgressDialog progressDialog;
-    private FirebaseAuth mAuth;
-    private static final int RC_SIGN_IN = 123;
+    //private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -70,27 +81,17 @@ public class MainActivity extends AppCompatActivity implements
         mAudioSetupComplete = false;
         ((MyApplication)getApplication()).setupAudio(this);
 
-        //check user
+        /*check user
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         String userId = sharedPref.getString(getString(R.string.stored_user_id), "");
+        String name = sharedPref.getString(getString(R.string.stored_user_name), "");
 
-        if (userId.equals("")) {
-            mAuth = FirebaseAuth.getInstance();
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                    new AuthUI.IdpConfig.PhoneBuilder().build(),
-                    new AuthUI.IdpConfig.GoogleBuilder().build(),
-                    new AuthUI.IdpConfig.FacebookBuilder().build(),
-                    new AuthUI.IdpConfig.TwitterBuilder().build());
-
-            // Create and launch sign-in intent
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(providers)
-                            .build(),
-                    RC_SIGN_IN);
+        if (userId == null || userId.equals("")) {
+           setupFirebaseAuthentication();
+        } else {
+            getSupportActionBar().setTitle(name);
         }
+        */
 
 
         //home screen
@@ -102,8 +103,47 @@ public class MainActivity extends AppCompatActivity implements
                     .commitAllowingStateLoss();
         } catch(Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+            Log.e("MAIN", ex.getMessage());
         }
     }
+
+    /*
+    private void setupFirebaseAuthentication() {
+        mAuth = FirebaseAuth.getInstance();
+
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().build());
+
+        // Create and launch sign-in intent
+        try {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    RC_SIGN_IN);
+        } catch(Exception ex) {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+
+    /*
+    public void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.remove(getString(R.string.stored_user_id));
+                        editor.apply();
+                    }
+                });
+    }*/
 
     public void onAudioSetupComplete(int code) {
         if (code == AUDIO_SETUP_MISSING_LANGUAGE) {
@@ -142,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showProgressDialog() {
         if (progressDialog == null) {
+            Log.d("PURCHASE", "show");
             progressDialog = new ProgressDialog(this);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Loading...");
@@ -194,18 +235,15 @@ public class MainActivity extends AppCompatActivity implements
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_change_user) {
+            //signOut();
+            //setupFirebaseAuthentication();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -224,37 +262,77 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void onHomeFragmentInteraction(Lesson lesson) {
-        Lesson complete = DbHelper
-                .getInstance(this)
-                .getLesson(lesson.Id);
+        //Log.d("PURCHASE", "MainActivity, lesson = " + lesson);
+            Lesson complete = DbHelper
+                    .getInstance(this)
+                    .getLesson(lesson.Id);
 
-        launchLesson(complete);
+            launchLesson(complete);
+
+    }
+
+    public void onTotalsFragmentInteraction() {
+        HomeFragment lessonFragment = HomeFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_content, lessonFragment)
+                .commitAllowingStateLoss();
+    }
+
+    public void onDownloadError(String msg){
+
+    }
+
+    public void onDownloadResult(String code, String type, Object result){
+        if (code.equals(DownloadCallback.RESPONSE_OK)) {
+            if (type.equals(DownloadCallback.TYPE_SYNC_USER)) {
+                hideProgressDialog();
+
+            }
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
+        /*if (requestCode == RC_SIGN_IN) {
+            //firebase authentication finished
+            try {
+                IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String name = user.getDisplayName();
-                String email = user.getEmail();
-                String uid = user.getUid();
-                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.stored_user_id), uid);
-                editor.apply();
+                if (resultCode == RESULT_OK) {
+                    // Successfully signed in
+                    showProgressDialog();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    String name = user.getDisplayName();
+                    getSupportActionBar().setTitle(name);
+                    String email = user.getEmail();
+                    String uid = user.getUid();
 
+                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(getString(R.string.stored_user_id), uid);
+                    editor.putString(getString(R.string.stored_user_name), name);
+                    editor.apply();
 
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
+                    getSupportActionBar().setTitle(name);
+                    ContentManager.syncUser(this, uid, email, name, this);
+                } else {
+                    // Sign in failed. If response is null the user canceled the
+                    // sign-in flow using the back button. Otherwise check
+                    // response.getError().getErrorCode() and handle the error.
+                    if (response == null) {
+
+                    } else {
+                        String msg = response.getError().getErrorCode() + ", " + response.getError().getMessage();
+                        Log.e("FIREBASE", msg);
+                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } catch (Exception ex) {
+                Log.e("FIREBASE", ex.getMessage());
+                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == USER_REQUEST_CODE) {
+        } else */if (requestCode == USER_REQUEST_CODE) {
 
 
         } else if (requestCode == TOTALS_REQUEST_CODE) {

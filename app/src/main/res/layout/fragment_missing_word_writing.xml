@@ -17,9 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/LabelTargetThai"/>
+        <ImageView
+            android:id="@+id/missingWordWriting_speaker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/missingWordWriting_txtThai"
+            android:src="@mipmap/ic_speaker"/>
         <TextView
             android:id="@+id/missingWordWriting_txtTarget"
             android:layout_below="@id/missingWordWriting_txtThai"
+            android:layout_toRightOf="@id/missingWordWriting_speaker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/LabelTarget"/>
@@ -28,8 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/missingWordWriting_txtTarget"
-            android:background="@color/colorAccent"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:padding="5dp"
             android:layout_marginTop="@dimen/button_border"/>
 

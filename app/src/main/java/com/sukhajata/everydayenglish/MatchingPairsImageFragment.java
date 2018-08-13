@@ -112,8 +112,6 @@ public class MatchingPairsImageFragment extends Fragment implements AudioFinishe
         final FrameLayout frame2 = (FrameLayout)layout.findViewById(R.id.matchingPairsImage_frame2);
         setupButton(btn2, mPage.MediaList.get(1), frame2);
 
-
-
         //shuffle list
         long seed = System.nanoTime();
         Collections.shuffle(mPage.MediaList, new Random(seed));

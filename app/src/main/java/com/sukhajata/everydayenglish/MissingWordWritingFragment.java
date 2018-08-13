@@ -88,15 +88,32 @@ public class MissingWordWritingFragment extends Fragment {
             }
         });
 
+        final String answer = mSlide.MediaList.get(0).English;
+        final String sentence = mSlide.ContentEnglish.substring(0, mSlide.ContentEnglish.indexOf('_')) +
+                answer + mSlide.ContentEnglish.substring(mSlide.ContentEnglish.lastIndexOf('_') + 1);
+
+        ((MyApplication)getActivity().getApplication()).playAudio(sentence, mSlide.AudioFileName);
+
+        Button btnPlay = (Button)view.findViewById(R.id.missingWordWriting_speaker);
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MyApplication)getActivity().getApplication()).playAudio(sentence, mSlide.AudioFileName);
+            }
+        });
+
         final Button btnSkip = (Button)view.findViewById(R.id.missingWordWriting_btnSkip);
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onSlideCompleted(mSlide.Id, 1);
+                txtEnglish.setText(sentence);
+                btnNext.setEnabled(true);
+                btnSkip.setVisibility(View.GONE);
+                errorCount++;
+
             }
         });
 
-        final String answer = mSlide.MediaList.get(0).English;
 
         EditText edit = ((EditText)view.findViewById(R.id.missingWordWriting_txtWriting));
         edit.addTextChangedListener(new TextWatcher() {
@@ -107,18 +124,14 @@ public class MissingWordWritingFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().toLowerCase().equals(answer.toLowerCase())) {
+                if (s.toString().toLowerCase().trim().equals(answer.toLowerCase())) {
                     //correct answer
                     InputMethodManager inputManager = (InputMethodManager)getActivity()
                             .getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
 
-                    final String sentence = mSlide.ContentEnglish.substring(0, mSlide.ContentEnglish.indexOf('_')) +
-                            answer + mSlide.ContentEnglish.substring(mSlide.ContentEnglish.lastIndexOf('_') + 1);
                     txtEnglish.setText(sentence);
-
-                    ((MyApplication)getActivity().getApplication()).playAudio(sentence, mSlide.AudioFileName);
 
                     btnNext.setEnabled(true);
                     btnSkip.setVisibility(View.GONE);
@@ -132,6 +145,8 @@ public class MissingWordWritingFragment extends Fragment {
         });
 
         if(edit.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(edit, InputMethodManager.SHOW_IMPLICIT);
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
 

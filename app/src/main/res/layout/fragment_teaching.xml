@@ -13,19 +13,19 @@
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/colorLabelBackground"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:padding="3sp"/>
+        android:padding="@dimen/label_padding"/>
 
     <TextView
         android:id="@+id/teaching_item_thai"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLabelBackground"
-        android:padding="3sp"
+        android:background="@color/colorLightGrey"
+        android:padding="@dimen/label_padding"
         android:textAppearance="?attr/textAppearanceListItem" />
     <TextView
         android:id="@+id/teaching_item_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryLight"
-        android:padding="3sp"/>
+        android:padding="@dimen/label_padding"/>
 </LinearLayout>

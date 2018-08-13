@@ -64,6 +64,7 @@ public class TeachingFragment extends Fragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.teaching_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setNestedScrollingEnabled(false);
         SlideMediaRecyclerViewAdapter adapter =
                 new SlideMediaRecyclerViewAdapter(getActivity(), mSlide.MediaList, mListener);
         recyclerView.setAdapter(adapter);

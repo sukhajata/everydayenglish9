@@ -1,15 +1,13 @@
 <resources>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Everyday English</string>
+    <string name="nav_header_subtitle">timcranfield31@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="app_name">ภาษาอังกฤษทุกวัน</string>
+    <string name="app_name">Everyday English</string>
     <string name="facebook_application_id">254605841663505</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb254605841663505</string>
-    <string name="twitter_consumer_key" translatable="false">fNGSmUYLxPonLJqcJBSVE1uzT</string>
-    <string name="twitter_consumer_secret" translatable="false">v7zbZ4MynwpkVV3CGfpeFhrtHFFNhxjYEeAPOU8ezQpVaZvwcC</string>
     <string name="add_account">Add Account</string>
     <string name="email">อีเมล</string>
     <string name="password">รหัสผ่าน</string>
@@ -41,8 +39,12 @@
     <string name="mistakes">ผิดพลาด</string>
     <string name="total_words">จำนวนคำ</string>
     <string name="percentage_of_english">เปอร์เซ็นต์ภาษาอังกฤษ</string>
+    <string name="upgrade">ข้าถึงบทเรียนมากกว่า 100 บท</string>
+    <string name="price">แค่ ฿99</string>
     <string name="title_activity_lesson">LessonActivity</string>
     <string name="title_activity_setup">SetupActivity</string>
     <string name="title_activity_text_to_speech">TextToSpeechActivity</string>
     <string name="stored_user_id">com.sukhajata.userid</string>
+    <string name="stored_user_name">com.sukhajata.name</string>
+    <string name="purchased">com.sukhajata.purchased</string>
 </resources>
